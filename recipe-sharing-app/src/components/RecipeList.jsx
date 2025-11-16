@@ -1,44 +1,52 @@
 // RecipeList component
 import { Link } from "react-router-dom";
 import { useRecipeStore, Recipe } from "./recipeStore";
+import { SearchBar } from "./SearchBar";
 
-export const RecipeList = () => {
-  const { recipes } = useRecipeStore();
+const RecipeList = () => {
+  const { filteredRecipes } = useRecipeStore();
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {recipes.map((recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
-      ))}
+    <div className="mx-auto max-w-6xl">
+      <SearchBar />
+
+      {filteredRecipes.length === 0 ? (
+        <p className="text-center text-gray-600">
+          No recipes found. Try adjusting your search.
+        </p>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filteredRecipes.map((recipe) => (
+            <RecipeCard key={recipe.id} recipe={recipe} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-const RecipeCard = ({ recipe }: { recipe: Recipe }) => (
-  <div className="rounded-lg border bg-white p-4 shadow-sm">
-    <h
-
-
-
-
-
-    <h3 className="text-lg font-semibold">{recipe.title}</h3>
-    <p className="text-sm text-gray-600">
+export const RecipeCard = ({ recipe }: { recipe: Recipe }) => (
+  <div className="rounded-xl border bg-white p-5 shadow-sm transition hover:shadow-md">
+    <h3 className="text-xl font-semibold text-gray-800">{recipe.title}</h3>
+    <p className="mt-1 text-sm text-gray-600">
       {recipe.cookingTime} min • {recipe.ingredients.length} ingredients
     </p>
-    <div className="mt-3 flex gap-2">
+
+    <div className="mt-4 flex gap-2">
       <Link
         to={`/recipe/${recipe.id}`}
-        className="flex-1 rounded bg-blue-600 px-3 py-1.5 text-center text-sm text-white hover:bg-blue-700"
+        className="flex-1 rounded bg-blue-600 px-4 py-2 text-center text-sm text-white hover:bg-blue-700"
       >
         View
       </Link>
       <Link
         to={`/edit/${recipe.id}`}
-        className="flex-1 rounded bg-amber-600 px-3 py-1.5 text-center text-sm text-white hover:bg-amber-700"
+        className="flex-1 rounded bg-amber-600 px-4 py-2 text-center text-sm text-white hover:bg-amber-700"
       >
         Edit
       </Link>
     </div>
   </div>
 );
+
+export default RecipeList;
