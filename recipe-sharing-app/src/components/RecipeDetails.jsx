@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useRecipeStore } from "./recipeStore";
 import { DeleteRecipeButton } from "./DeleteRecipeButton";
 
-export const RecipeDetails = () => {
+const RecipeDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { recipes } = useRecipeStore();
   const recipe = recipes.find((r) => r.id === id);
@@ -51,3 +51,5 @@ export const RecipeDetails = () => {
     </div>
   );
 };
+
+export default RecipeDetails;

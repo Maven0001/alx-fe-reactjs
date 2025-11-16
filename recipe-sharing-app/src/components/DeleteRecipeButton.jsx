@@ -5,7 +5,7 @@ interface Props {
   id: string;
 }
 
-export const DeleteRecipeButton = ({ id }: Props) => {
+const DeleteRecipeButton = ({ id }: Props) => {
   const { deleteRecipe } = useRecipeStore();
   const navigate = useNavigate();
 
@@ -25,3 +25,5 @@ export const DeleteRecipeButton = ({ id }: Props) => {
     </button>
   );
 };
+
+export default DeleteRecipeButton;
