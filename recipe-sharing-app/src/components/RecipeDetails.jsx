@@ -46,6 +46,9 @@ const RecipeDetails = () => {
         >
           Edit
         </Link>
+        <div className="mt-4">
+  <FavoriteButton recipeId={recipe.id} />
+</div>
         <DeleteRecipeButton id={recipe.id} />
       </div>
     </div>
