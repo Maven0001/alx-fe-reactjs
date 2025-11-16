@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useRecipeStore } from "../store/recipeStore";
 
-export const RecommendationsList = () => {
+const RecommendationsList = () => {
   const { recommendations, generateRecommendations } = useRecipeStore();
 
   // Regenerate on mount
@@ -33,3 +33,5 @@ export const RecommendationsList = () => {
     </div>
   );
 };
+
+export default RecommendationsList;

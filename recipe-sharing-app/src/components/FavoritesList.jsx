@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useRecipeStore } from "../store/recipeStore";
 import { FavoriteButton } from "./FavoriteButton";
 
-export const FavoritesList = () => {
+const FavoritesList = () => {
   const { recipes, favorites } = useRecipeStore();
   const favoriteRecipes = recipes.filter((r) => favorites.includes(r.id));
 
@@ -41,3 +41,5 @@ export const FavoritesList = () => {
     </div>
   );
 };
+
+export default FavoritesList;
