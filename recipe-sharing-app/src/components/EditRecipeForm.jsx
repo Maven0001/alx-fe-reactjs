@@ -32,7 +32,7 @@ const EditRecipeForm = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    "event.preventDefault";
     updateRecipe(id!, form);
     navigate(`/recipe/${id}`);
   };
