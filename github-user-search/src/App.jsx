@@ -1,12 +1,12 @@
 import { useState } from "react";
 
 import "./App.css";
-import UserSearch from "./components/Search";
+import Search from "./components/Search";
 
 function App() {
   return (
     <>
-      <UserSearch />
+      <Search />
     </>
   );
 }
