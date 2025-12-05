@@ -80,7 +80,7 @@ const HomePage = () => {
                 <p className="text-gray-600 line-clamp-3">{recipe.summary}</p>
                 <div className="mt-6">
                   <Link
-                    href={`/recipe/${recipe.id}`}
+                    to={"/RecipeDetails"}
                     className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition"
                   >
                     View Recipe
