@@ -10,7 +10,7 @@ const RecipeDetail = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await fetch("/data/data.json");
+        const response = await fetch("/data.json");
         if (!response.ok) throw new Error("Failed to load recipe");
         const data = await response.json();
 

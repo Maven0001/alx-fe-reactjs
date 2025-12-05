@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const HomePage = () => {
@@ -9,7 +9,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch("/data/data.json");
+        const response = await fetch("/data.json");
 
         if (!response.ok) {
           throw new Error("Failed to load recipes");
@@ -79,12 +79,12 @@ const HomePage = () => {
                 </h3>
                 <p className="text-gray-600 line-clamp-3">{recipe.summary}</p>
                 <div className="mt-6">
-                  <a
+                  <Link
                     href={`/recipe/${recipe.id}`}
                     className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition"
                   >
                     View Recipe
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
