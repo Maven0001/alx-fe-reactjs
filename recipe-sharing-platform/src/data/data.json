@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "title": "Spaghetti Carbonara",
+    "summary": "A classic Italian pasta dish made with eggs, cheese, pancetta, and black pepper.",
+    "image": "https://images.unsplash.com/photo-1621996346565-e3dbc44ae37d?w=800&h=600&fit=crop",
+    "ingredients": [
+      "400g spaghetti",
+      "200g pancetta or guanciale",
+      "4 large eggs",
+      "100g Pecorino Romano cheese",
+      "Freshly ground black pepper",
+      "Salt"
+    ],
+    "instructions": [
+      "Bring a large pot of salted water to boil and cook spaghetti until al dente.",
+      "Meanwhile, fry pancetta in a pan until crispy. Remove from heat.",
+      "In a bowl, whisk eggs and grated cheese together with lots of black pepper.",
+      "Reserve 1 cup pasta water, then drain spaghetti.",
+      "Add hot spaghetti to the pancetta pan (off heat), toss quickly.",
+      "Pour egg mixture over pasta and toss vigorously. Add pasta water if needed for creaminess.",
+      "Serve immediately with extra cheese and pepper."
+    ],
+    "prepTime": "10 mins",
+    "cookTime": "15 mins",
+    "servings": 4
+  },
+  {
+    "id": 2,
+    "title": "Chicken Tikka Masala",
+    "summary": "Tender chicken chunks in a rich, creamy, and spiced tomato gravy.",
+    "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&h=600&fit=crop",
+    "ingredients": [
+      "800g chicken thighs, cubed",
+      "200g yogurt",
+      "4 tbsp tikka spice mix",
+      "1 onion, finely chopped",
+      "400g tomato passata",
+      "200ml heavy cream",
+      "Fresh cilantro for garnish"
+    ],
+    "instructions": [
+      "Marinate chicken in yogurt and tikka spices for at least 1 hour.",
+      "Grill or pan-fry chicken until charred and cooked through.",
+      "In a pan, sauté onion until golden.",
+      "Add tomato passata and simmer for 10 minutes.",
+      "Stir in cream and cooked chicken.",
+      "Simmer for 5 more minutes.",
+      "Garnish with cilantro and serve with rice or naan."
+    ],
+    "prepTime": "15 mins + marinating",
+    "cookTime": "30 mins",
+    "servings": 6
+  }
+]
