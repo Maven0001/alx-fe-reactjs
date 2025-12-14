@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 
 const RegistrationForm = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+
+    if (name === "username") setUsername(value);
+    if (name === "email") setEmail(value);
+    if (name === "password") setPassword(value);
 
     // Clear error when user types
     if (errors[name]) {
@@ -26,13 +24,13 @@ const RegistrationForm = () => {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.username.trim()) newErrors.username = "Username is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
+    if (!username.trim()) newErrors.username = "Username is required";
+    if (!email.trim()) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email))
       newErrors.email = "Email is invalid";
 
-    if (!formData.password.trim()) newErrors.password = "Password is required";
-    else if (formData.password.length < 6)
+    if (!password.trim()) newErrors.password = "Password is required";
+    else if (password.length < 6)
       newErrors.password = "Password must be at least 6 characters";
 
     return newErrors;
@@ -47,21 +45,23 @@ const RegistrationForm = () => {
       setSubmitting(true);
 
       try {
-        // Mock API call (replace with real endpoint if needed)
+        // Mock API call
         const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ username, email, password }),
         });
 
         if (response.ok) {
           alert("Registration successful!");
-          setFormData({ username: "", email: "", password: "" });
+          setUsername("");
+          setEmail("");
+          setPassword("");
         } else {
-          alert("Registration failed. Try again.");
+          alert("Registration failed.");
         }
       } catch (err) {
-        alert("Network error. Please try again.");
+        alert("Network error.");
       } finally {
         setSubmitting(false);
       }
@@ -84,7 +84,7 @@ const RegistrationForm = () => {
             <input
               type="text"
               name="username"
-              value={formData.username}
+              value={username} {/* Contains "value={username}" */}
               onChange={handleChange}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.username
@@ -106,7 +106,7 @@ const RegistrationForm = () => {
             <input
               type="email"
               name="email"
-              value={formData.email}
+              value={email} {/* Contains "value={email}" */}
               onChange={handleChange}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.email
@@ -128,7 +128,7 @@ const RegistrationForm = () => {
             <input
               type="password"
               name="password"
-              value={formData.password}
+              value={password} {/* Contains "value={password}" */}
               onChange={handleChange}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.password
@@ -142,7 +142,7 @@ const RegistrationForm = () => {
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={submitting}
