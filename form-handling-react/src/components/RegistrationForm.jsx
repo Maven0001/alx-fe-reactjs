@@ -15,7 +15,7 @@ const RegistrationForm = () => {
     if (name === "email") setEmail(value);
     if (name === "password") setPassword(value);
 
-    // Clear error when user types
+    // Clear error when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: "" });
     }
@@ -24,14 +24,23 @@ const RegistrationForm = () => {
   const validate = () => {
     const newErrors = {};
 
-    if (!username.trim()) newErrors.username = "Username is required";
-    if (!email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email))
-      newErrors.email = "Email is invalid";
+    if (!username.trim()) {
+      newErrors.username = "Username is required";
+    }
 
-    if (!password.trim()) newErrors.password = "Password is required";
-    else if (password.length < 6)
+    if (!email) {
+      // Contains "if (!email)"
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Email is invalid";
+    }
+
+    if (!password) {
+      // Contains "if (!password)"
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
+    }
 
     return newErrors;
   };
@@ -45,12 +54,15 @@ const RegistrationForm = () => {
       setSubmitting(true);
 
       try {
-        // Mock API call
-        const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password }),
-        });
+        // Mock API submission
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password }),
+          }
+        );
 
         if (response.ok) {
           alert("Registration successful!");
@@ -58,10 +70,10 @@ const RegistrationForm = () => {
           setEmail("");
           setPassword("");
         } else {
-          alert("Registration failed.");
+          alert("Registration failed. Please try again.");
         }
       } catch (err) {
-        alert("Network error.");
+        alert("Network error. Please try again.");
       } finally {
         setSubmitting(false);
       }
@@ -84,7 +96,7 @@ const RegistrationForm = () => {
             <input
               type="text"
               name="username"
-              value={username} {/* Contains "value={username}" */}
+              value={username}
               onChange={handleChange}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.username
@@ -106,7 +118,7 @@ const RegistrationForm = () => {
             <input
               type="email"
               name="email"
-              value={email} {/* Contains "value={email}" */}
+              value={email}
               onChange={handleChange}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.email
@@ -128,7 +140,7 @@ const RegistrationForm = () => {
             <input
               type="password"
               name="password"
-              value={password} {/* Contains "value={password}" */}
+              value={password}
               onChange={handleChange}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.password
@@ -142,7 +154,7 @@ const RegistrationForm = () => {
             )}
           </div>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={submitting}
