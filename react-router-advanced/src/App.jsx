@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import ProfileDetails from "./pages/ProfileDetails";
-import ProfileSettings from "./pages/ProfileSettings";
-import BlogPost from "./pages/BlogPost";
-import Login from "./pages/Login";
+import Profile from "./Profile";
+import ProfileDetails from "./ProfileDetails";
+import ProfileSettings from "./ProfileSettings";
+import BlogPost from "./BlogPost";
+import Login from "./Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
