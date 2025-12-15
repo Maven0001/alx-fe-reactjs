@@ -1,16 +1,5 @@
-
-
-
-
-const validationSchema = Yup.object({
-  username: Yup.string().required("Username is required"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
-});
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const FormikForm = () => {
   const initialValues = {
@@ -19,24 +8,40 @@ const FormikForm = () => {
     password: "",
   };
 
-  const onSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/posts",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(values),
-        }
-      );
+  const validationSchema = Yup.object({
+    username: Yup.string().required("Username is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string().required("Password is required"),
+  });
 
-      if (response.ok) {
-        alert("Registration successful with Formik!");
-        resetForm();
-      }
-    } catch (err) {
-      alert("Submission failed.");
-    } finally {
-      setSubmitting(false);
-    }
+  const handleSubmit = (values) => {
+    console.log("Formik Registration:", values);
   };
+
+  return (
+    <div>
+      <h2>Register (Formik Form)</h2>
+
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form>
+          <Field name="username" placeholder="Username" />
+          <ErrorMessage name="username" component="div" />
+
+          <Field name="email" type="email" placeholder="Email" />
+          <ErrorMessage name="email" component="div" />
+
+          <Field name="password" type="password" placeholder="Password" />
+          <ErrorMessage name="password" component="div" />
+
+          <button type="submit">Register</button>
+        </Form>
+      </Formik>
+    </div>
+  );
+};
+
+export default FormikForm;
