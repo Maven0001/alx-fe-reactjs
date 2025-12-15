@@ -1,55 +1,24 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export interface Recipe {
-  id: string;
-  title: string;
-  ingredients: string[];
-  instructions: string;
-  cookingTime: number;
-  category?: string; // optional for better recommendations
-}
-
-interface RecipeState {
-  recipes: Recipe[];
-  searchTerm: string;
-  filteredRecipes: Recipe[];
-  favorites: string[];          // <-- NEW: array of recipe IDs
-  recommendations: Recipe[];    // <-- NEW: suggested recipes
-
-  // --- Actions ---
-  addRecipe: (recipe: Omit<Recipe, "id">) => void;
-  updateRecipe: (id: string, updates: Partial<Recipe>) => void;
-  deleteRecipe: (id: string) => void;
-
-  setSearchTerm: (term: string) => void;
-  filterRecipes: () => void;
-
-  // --- NEW: Favorites Actions ---
-  addFavorite: (recipeId: string) => void;
-  removeFavorite: (recipeId: string) => void;
-  toggleFavorite: (recipeId: string) => void;
-
-  // --- NEW: Recommendations ---
-  generateRecommendations: () => void;
-}
-
-export const useRecipeStore = create<RecipeState>()(
+const useRecipeStore = create(
   persist(
     (set, get) => ({
+      // -------------------------------------------------
+      // State
+      // -------------------------------------------------
       recipes: [],
       searchTerm: "",
       filteredRecipes: [],
       favorites: [],
       recommendations: [],
 
-      // --- Core CRUD ---
+      // -------------------------------------------------
+      // CRUD
+      // -------------------------------------------------
       addRecipe: (recipe) =>
         set((state) => ({
-          recipes: [
-            ...state.recipes,
-            { ...recipe, id: crypto.randomUUID() },
-          ],
+          recipes: [...state.recipes, { ...recipe, id: crypto.randomUUID() }],
         })),
 
       updateRecipe: (id, updates) =>
@@ -64,7 +33,9 @@ export const useRecipeStore = create<RecipeState>()(
           recipes: state.recipes.filter((r) => r.id !== id),
         })),
 
-      // --- Search & Filter ---
+      // -------------------------------------------------
+      // Search / Filter
+      // -------------------------------------------------
       setSearchTerm: (term) => {
         set({ searchTerm: term });
         get().filterRecipes();
@@ -74,76 +45,65 @@ export const useRecipeStore = create<RecipeState>()(
         const { recipes, searchTerm } = get();
         const lower = searchTerm.toLowerCase().trim();
         const filtered = recipes.filter((r) => {
-          const matchesTitle = r.title.toLowerCase().includes(lower);
-          const matchesIngredient = r.ingredients.some((ing) =>
-            ing.toLowerCase().includes(lower)
+          const title = r.title.toLowerCase().includes(lower);
+          const ingredient = r.ingredients.some((i) =>
+            i.toLowerCase().includes(lower)
           );
-          const matchesTime = lower === "" || r.cookingTime.toString().includes(lower);
-          return matchesTitle || matchesIngredient || matchesTime;
+          const time = lower === "" || r.cookingTime.toString().includes(lower);
+          return title || ingredient || time;
         });
         set({ filteredRecipes: filtered });
       },
 
-      // --- Favorites Actions ---
-      addFavorite: (recipeId) =>
-        set((state) => ({
-          favorites: [...state.favorites, recipeId],
-        })),
-
-      removeFavorite: (recipeId) =>
-        set((state) => ({
-          favorites: state.favorites.filter((id) => id !== recipeId),
-        })),
-
+      // -------------------------------------------------
+      // Favorites
+      // -------------------------------------------------
       toggleFavorite: (recipeId) => {
         const { favorites } = get();
-        if (favorites.includes(recipeId)) {
-          get().removeFavorite(recipeId);
-        } else {
-          get().addFavorite(recipeId);
-        }
-        get().generateRecommendations(); // update recs when favorites change
+        const newFavs = favorites.includes(recipeId)
+          ? favorites.filter((id) => id !== recipeId)
+          : [...favorites, recipeId];
+        set({ favorites: newFavs });
+        get().generateRecommendations();
       },
 
-      // --- Recommendations Logic ---
+      // -------------------------------------------------
+      // Recommendations
+      // -------------------------------------------------
       generateRecommendations: () => {
         const { recipes, favorites } = get();
 
         if (favorites.length === 0) {
-          // Show 3 random recipes if no favorites
           const shuffled = [...recipes].sort(() => 0.5 - Math.random());
           set({ recommendations: shuffled.slice(0, 3) });
           return;
         }
 
-        // Find recipes that share ingredients or category with favorites
-        const favoriteRecipes = recipes.filter((r) => favorites.includes(r.id));
-        const favoriteIngredients = new Set(
-          favoriteRecipes.flatMap((r) => r.ingredients.map((i) => i.toLowerCase()))
-        );
-        const favoriteCategories = new Set(
-          favoriteRecipes.map((r) => r.category).filter(Boolean)
+        const favRecipes = recipes.filter((r) => favorites.includes(r.id));
+        const favIngredients = new Set(
+          favRecipes.flatMap((r) => r.ingredients.map((i) => i.toLowerCase()))
         );
 
         const scored = recipes
-          .filter((r) => !favorites.includes(r.id)) // exclude already favorited
+          .filter((r) => !favorites.includes(r.id))
           .map((r) => {
             let score = 0;
-            r.ingredients.forEach((ing) => {
-              if (favoriteIngredients.has(ing.toLowerCase())) score += 2;
+            r.ingredients.forEach((i) => {
+              if (favIngredients.has(i.toLowerCase())) score += 2;
             });
-            if (favoriteCategories.has(r.category)) score += 3;
-            if (r.cookingTime <= 30) score += 1; // bonus for quick recipes
+            if (r.cookingTime <= 30) score += 1;
             return { recipe: r, score };
           })
-          .filter((item) => item.score > 0)
+          .filter((i) => i.score > 0)
           .sort((a, b) => b.score - a.score)
           .slice(0, 4)
-          .map((item) => item.recipe);
+          .map((i) => i.recipe);
 
-        set({ recommendations: scored.length > 0 ? scored : [] });
+        set({ recommendations: scored });
       },
     }),
     { name: "recipe-storage" }
   )
 );
+
+export default useRecipeStore;

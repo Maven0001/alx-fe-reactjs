@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useRecipeStore } from "./recipeStore";
+import useRecipeStore from "./recipeStore";
 
 interface Props {
   id: string;

@@ -1,102 +1,86 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useRecipeStore, Recipe } from "./recipeStore";
+import useRecipeStore from "./recipeStore";
 
-const EditRecipeForm = () => {
-  const { id } = useParams<{ id: string }>();
+export const EditRecipeForm = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const { recipes, updateRecipe } = useRecipeStore();
-
   const recipe = recipes.find((r) => r.id === id);
-  if (!recipe)
-    return <p className="text-center text-red-600">Recipe not found.</p>;
 
-  const [form, setForm] = useState<Partial<Recipe>>({
-    title: recipe.title,
-    ingredients: recipe.ingredients,
-    instructions: recipe.instructions,
-    cookingTime: recipe.cookingTime,
+  const [form, setForm] = useState({
+    title: recipe?.title || "",
+    cookingTime: recipe?.cookingTime || 0,
+    ingredients: recipe?.ingredients.join("\n") || "",
+    instructions: recipe?.instructions || "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "ingredients") {
-      setForm((prev) => ({ ...prev, ingredients: value.split("\n") }));
-    } else if (name === "cookingTime") {
-      setForm((prev) => ({ ...prev, cookingTime: Number(value) }));
-    } else {
-      setForm((prev) => ({ ...prev, [name]: value }));
-    }
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    "event.preventDefault";
-    updateRecipe(id!, form);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateRecipe(id, {
+      title: form.title,
+      cookingTime: Number(form.cookingTime),
+      ingredients: form.ingredients.split("\n").filter(Boolean),
+      instructions: form.instructions,
+    });
     navigate(`/recipe/${id}`);
   };
 
+  if (!recipe) return <p>Recipe not found.</p>;
+
   return (
-    <form onSubmit={handleSubmit} className="mx-auto max-w-2xl space-y-4">
-      <div>
-        <label className="block font-medium">Title</label>
-        <input
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          required
-          className="w-full rounded border p-2"
-        />
-      </div>
-
-      <div>
-        <label className="block font-medium">Cooking Time (min)</label>
-        <input
-          type="number"
-          name="cookingTime"
-          value={form.cookingTime}
-          onChange={handleChange}
-          required
-          className="w-full rounded border p-2"
-        />
-      </div>
-
-      <div>
-        <label className="block font-medium">Ingredients (one per line)</label>
-        <textarea
-          name="ingredients"
-          value={form.ingredients?.join("\n")}
-          onChange={handleChange}
-          rows={6}
-          required
-          className="w-full rounded border p-2"
-        />
-      </div>
-
-      <div>
-        <label className="block font-medium">Instructions</label>
-        <textarea
-          name="instructions"
-          value={form.instructions}
-          onChange={handleChange}
-          rows={8}
-          required
-          className="w-full rounded border p-2"
-        />
-      </div>
-
-      <div className="flex gap-3">
+    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4 p-4">
+      <input
+        name="title"
+        value={form.title}
+        onChange={handleChange}
+        placeholder="Title"
+        required
+        className="w-full border p-2 rounded"
+      />
+      <input
+        type="number"
+        name="cookingTime"
+        value={form.cookingTime}
+        onChange={handleChange}
+        placeholder="Cooking time (min)"
+        required
+        className="w-full border p-2 rounded"
+      />
+      <textarea
+        name="ingredients"
+        value={form.ingredients}
+        onChange={handleChange}
+        placeholder="One ingredient per line"
+        rows={5}
+        required
+        className="w-full border p-2 rounded"
+      />
+      <textarea
+        name="instructions"
+        value={form.instructions}
+        onChange={handleChange}
+        placeholder="Instructions"
+        rows={8}
+        required
+        className="w-full border p-2 rounded"
+      />
+      <div className="flex gap-2">
         <button
           type="submit"
-          className="rounded bg-green-600 px-5 py-2 text-white hover:bg-green-700"
+          className="bg-green-600 text-white px-4 py-2 rounded"
         >
-          Save Changes
+          Save
         </button>
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="rounded bg-gray-600 px-5 py-2 text-white hover:bg-gray-700"
+          className="bg-gray-600 text-white px-4 py-2 rounded"
         >
           Cancel
         </button>
@@ -104,5 +88,3 @@ const EditRecipeForm = () => {
     </form>
   );
 };
-
-export default EditRecipeForm;

@@ -6,31 +6,42 @@ function Navbar() {
       style={{
         backgroundColor: "#00cc55ff",
         padding: "16px",
-        display: "flex",
-        justifyContent: "center",
-        gap: "24px",
+        width: "100vw",
       }}
     >
-      <ul>
+      <ul
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "24px",
+          listStyle: "none",
+        }}
+      >
         <li>
-          <link to="/" style={{ color: "white", textDecoration: "none" }}>
+          <Link to="/" style={{ color: "white", textDecoration: "none" }}>
             Home
-          </link>
-          <link to="/about" style={{ color: "white", textDecoration: "none" }}>
+          </Link>
+        </li>
+        <li>
+          <Link to="/about" style={{ color: "white", textDecoration: "none" }}>
             About
-          </link>
-          <link
+          </Link>
+        </li>
+        <li>
+          <Link
             to="/services"
             style={{ color: "white", textDecoration: "none" }}
           >
             Services
-          </link>
-          <link
+          </Link>
+        </li>
+        <li>
+          <Link
             to="/contact"
             style={{ color: "white", textDecoration: "none" }}
           >
             Contact
-          </link>
+          </Link>
         </li>
       </ul>
     </nav>

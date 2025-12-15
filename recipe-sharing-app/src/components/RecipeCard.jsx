@@ -1,30 +1,29 @@
 import { Link } from "react-router-dom";
-import { Recipe } from "../store/recipeStore";
-import { FavoriteButton } from "./FavoriteButton";
+import FavoriteButton from "./FavoriteButton";
 
-export const RecipeCard = ({ recipe }: { recipe: Recipe }) => (
-  <div className="rounded-xl border bg-white p-5 shadow-sm transition hover:shadow-md">
-    <h3 className="text-xl font-semibold text-gray-800">{recipe.title}</h3>
-    <p className="mt-1 text-sm text-gray-600">
+export const RecipeCard = ({ recipe }) => (
+  <div className="border rounded p-4 bg-white shadow-sm">
+    <h3 className="font-bold text-lg">{recipe.title}</h3>
+    <p className="text-sm text-gray-600">
       {recipe.cookingTime} min • {recipe.ingredients.length} ingredients
     </p>
 
-    <div className="mt-4 flex gap-2">
+    <div className="mt-2 flex gap-2">
       <Link
         to={`/recipe/${recipe.id}`}
-        className="flex-1 rounded bg-blue-600 px-4 py-2 text-center text-sm text-white hover:bg-blue-700"
+        className="bg-blue-600 text-white px-3 py-1 rounded text-sm"
       >
         View
       </Link>
       <Link
         to={`/edit/${recipe.id}`}
-        className="flex-1 rounded bg-amber-600 px-4 py-2 text-center text-sm text-white hover:bg-amber-700"
+        className="bg-amber-600 text-white px-3 py-1 rounded text-sm"
       >
         Edit
       </Link>
     </div>
 
-    <div className="mt-3">
+    <div className="mt-2">
       <FavoriteButton recipeId={recipe.id} />
     </div>
   </div>
